@@ -1,0 +1,59 @@
+# Configuración (temas, puerto, etc.)
+# https://docs.streamlit.io/develop/api-reference/configuration/config.toml
+# https://github.com/jmedia65/awesome-streamlit-themes
+# https://github.com/streamlit/agent-skills/blob/main/developing-with-streamlit/skills/creating-streamlit-themes/SKILL.md#theme-templates
+#
+# Nota: las fuentes se cargan desde Google Fonts con la sintaxis
+# "<stack>:<stylesheet_url>" (sin archivos locales). Si la app corre en
+# una red sin salida a internet, se cae al fallback (sans-serif/monospace).
+
+[theme]
+base = "dark"                        # Deriva valores por defecto (charts, badges, dataframes) del modo oscuro
+# 🌙 DARK MODE DEVELOPER PALETTE 🌙
+primaryColor = "#a855f7"             # Purple-500 - vibrant, code-like accent
+                                     # (contraste ≈3.9:1 con texto blanco de
+                                     # botones primarios; alternativa WCAG AA:
+                                     # #9333ea → ≈5.4:1)
+backgroundColor = "#0d1117"          # GitHub-like dark background - developer comfort
+secondaryBackgroundColor = "#161b22" # Slightly lighter - cards and sections
+textColor = "#f0f6fc"                # Light blue-white - easy on eyes
+linkColor = "#58a6ff"                # GitHub-like blue - familiar developer color
+borderColor = "#30363d"              # Dark gray borders - subtle definition
+showWidgetBorder = true
+showSidebarBorder = true
+baseRadius = "0.375rem"              # Moderate rounding - modern feel
+
+# ── Tipografía ─────────────────────────────────────────────
+font = "Inter, sans-serif:https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+codeFont = "JetBrains Mono, monospace:https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+baseFontSize = 14                    # Cuerpo compacto, cómodo para grillas
+baseFontWeight = 400
+headingFontSizes = ["28px", "22px", "18px", "16px", "14px", "12px"]
+headingFontWeights = [600, 600, 600, 500, 500, 500]
+linkUnderline = false
+
+# ── Código ─────────────────────────────────────────────────
+codeBackgroundColor = "#21262d"      # GitHub dark code blocks - distinto del fondo principal
+codeTextColor = "#e6edf3"
+codeFontSize = "0.875rem"
+
+# ── Gráficos (Plotly/Altair/Vega/ECharts) ──────────────────
+# Paleta pensada para fondos oscuros (deriva de la guía oficial de themes)
+chartCategoricalColors = ["#58a6ff", "#3fb950", "#db61a2", "#a371f7", "#f85149", "#d29922", "#8b949e"]
+
+# ── Dataframes (Precarizados, Honorarios, Reportes) ────────
+dataframeHeaderBackgroundColor = "#161b22"
+dataframeBorderColor = "#30363d"
+
+# ── Colores semánticos (st.success/error/warning, badges) ──
+greenColor = "#3fb950"
+redColor = "#f85149"
+orangeColor = "#db6d28"
+yellowColor = "#d29922"
+blueColor = "#58a6ff"
+violetColor = "#a855f7"
+
+[theme.sidebar]
+backgroundColor = "#161b22"          # Más claro que el contenido - separación estilo VS Code
+secondaryBackgroundColor = "#21262d" # Inputs/controles de la sidebar - mismo layer que code blocks
+borderColor = "#30363d"
