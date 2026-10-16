@@ -10,7 +10,7 @@ from views.aux_tables import (
     report_selections_key,
     report_template,
 )
-from views.modals import modal_delete_registro_gral, modal_honorarios, modal_precarizado
+from views.modals import modal_delete_registro_gral
 
 __all__ = [
     "ReportState",
@@ -22,6 +22,4 @@ __all__ = [
     "dataframe_with_buttons",
     "params_preparation",
     "modal_delete_registro_gral",
-    "modal_honorarios",
-    "modal_precarizado",
 ]
