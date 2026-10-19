@@ -1,4 +1,4 @@
-"""Endpoints de la API de INVICO Slave."""
+"""Endpoints de la API de INVICO Planillometro."""
 
 __all__ = ["Endpoints"]
 
@@ -9,6 +9,8 @@ from enum import Enum
 class Endpoints(str, Enum):
     """URLs de los endpoints disponibles en la API de Koyeb."""
 
+    OBRAS_RECUPERADAS = "/sgv/obrasRecuperadas"
+    OBRAS_DESACTIVADAS = "/sgv/obrasDesactivadas"
     SLAVE_FACTUREROS = "/slave/factureros"
     SLAVE_FACTUREROS_ACTIVIDADES = "/slave/factureros/actividades"
     SLAVE_FACTUREROS_PARTIDAS = "/slave/factureros/partidas"

@@ -15,7 +15,7 @@ capa de UI (``AGENTS.md`` §1).
 """
 
 __all__ = [
-    "get_precarizados",
+    "get_obras_recuperadas",
     "get_referencias_factureros",
     "get_referencias_honorarios",
     "get_ejercicios_list",
@@ -304,12 +304,12 @@ def get_referencias_honorarios(update_trigger: int = 0) -> tuple[list[str], list
 
 # --------------------------------------------------
 @st.cache_data(ttl=3600)
-def get_precarizados(
+def get_obras_recuperadas(
     filtro_avanzado: str = "",
     update_trigger: int = 0,
 ) -> pd.DataFrame:
     """
-    Obtiene el padrón de precarizados desde la API.
+    Obtiene el padrón de obras recuperadas desde la API.
 
     No persiste en Parquet (igual que :func:`get_honorarios`): el
     ``@st.cache_data`` (TTL de 1 hora) es la única capa de caché, que
@@ -322,7 +322,7 @@ def get_precarizados(
         update_trigger: Incrementar para forzar la actualización de caché.
 
     Returns:
-        DataFrame con los precarizados.
+        DataFrame con las obras recuperadas.
 
     Raises:
         APIConnectionError: Si la API falla.
@@ -333,10 +333,12 @@ def get_precarizados(
         "queryFilter": filtro_avanzado,
     }
     df: pd.DataFrame = fetch_dataframe(
-        Endpoints.SLAVE_FACTUREROS.value, params=params_peticion
+        Endpoints.OBRAS_RECUPERADAS.value, params=params_peticion
     )
     if not df.empty:
-        df = df.sort_values(["nombre_completo", "actividad", "partida"], ascending=True)
+        df = df.sort_values(
+            ["ejercicio", "estructura", "cod_barrio"], ascending=[False, True, True]
+        )
 
     return df
 
@@ -447,7 +449,7 @@ def sincronizar_caches(
 
     # ── Precarizados: sólo memoria + API (sin Parquet) ──
     try:
-        df_precarizados: pd.DataFrame = get_precarizados(
+        df_precarizados: pd.DataFrame = get_obras_recuperadas(
             update_trigger=trigger_precarizados
         )
     except ex.AppBaseException as api_exc:

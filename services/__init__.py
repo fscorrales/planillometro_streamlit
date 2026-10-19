@@ -10,7 +10,7 @@ from services.api import (
 from services.data_fetcher import (
     get_ejercicios_list,
     get_honorarios,
-    get_precarizados,
+    get_obras_recuperadas,
     get_referencias_factureros,
     get_referencias_honorarios,
     sincronizar_caches,
@@ -22,7 +22,7 @@ __all__ = [
     "post_request",
     "put_request",
     "delete_request",
-    "get_precarizados",
+    "get_obras_recuperadas",
     "get_referencias_factureros",
     "get_referencias_honorarios",
     "get_ejercicios_list",

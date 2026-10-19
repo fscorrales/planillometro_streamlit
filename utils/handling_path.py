@@ -52,12 +52,12 @@ def get_cache_path() -> str:
 # --------------------------------------------------
 def get_secure_cache_path() -> str:
     """
-    Retorna una ruta de caché en ``%LOCALAPPDATA%\\Slave\\.cache`` (Windows)
+    Retorna una ruta de caché en ``%LOCALAPPDATA%\\Planillometro\\.cache`` (Windows)
     o en el home del usuario (otros OS). Se usa para datos sensibles o
     de gran tamaño que no deben quedar junto al ejecutable.
     """
     app_data: str = os.environ.get("LOCALAPPDATA", os.path.expanduser("~"))
-    dir_path: str = os.path.join(app_data, "Slave", ".cache")
+    dir_path: str = os.path.join(app_data, "Planillometro", ".cache")
     os.makedirs(dir_path, exist_ok=True)
     return dir_path
 
