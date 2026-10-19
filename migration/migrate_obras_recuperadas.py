@@ -279,14 +279,23 @@ def build_documents(
     """
     documents: list[dict[str, Any]] = []
     errors: list[str] = []
+    skipped_empty: int = 0
 
     for position, (_, row) in enumerate(df.iterrows(), start=2):
         # La fila 1 de la hoja son los headers (start=2 = fila real).
         raw_values: dict[str, Any] = {
             field: row[column] for field, column in column_map.items()
         }
-        # Descartar filas totalmente vacías.
-        if all(clean_text(value) == "" for value in raw_values.values()):
+        # Descartar filas sin datos de negocio: vacías o con valores
+        # ajenos al modelo (ej. una celda "$0,00" residual al final de
+        # la hoja). Sin ejercicio/identificador/estructura/notas la fila
+        # no puede convertirse en un documento atribuible.
+        if all(
+            clean_text(raw_values[field]) == ""
+            for field in REQUIRED_FIELDS
+            if field != "importe"
+        ):
+            skipped_empty += 1
             continue
 
         try:
@@ -315,6 +324,12 @@ def build_documents(
         )
         documents.append(document)
 
+    if skipped_empty:
+        print(
+            f"⚠️  {skipped_empty} fila(s) descartadas por estar vacías o sin "
+            f"datos de negocio (ejercicio/identificador/estructura/notas "
+            f"en blanco)."
+        )
     if errors:
         details: str = "\n".join(errors[:20])
         extra: str = (
