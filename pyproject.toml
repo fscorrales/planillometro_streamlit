@@ -1,6 +1,6 @@
 [project]
 name = "planillometro-streamlit"
-version = "0.1.1"
+version = "0.2.0"
 description = ""
 authors = [{ name = "Fernando Corrales", email = "fscpython@gmail.com" }]
 readme = "README.md"
@@ -12,6 +12,7 @@ dependencies = [
     "pydantic (>=2.13.5,<3.0.0)",
     "python-dotenv (>=1.2.3,<2.0.0)",
     "openpyxl (>=3.1.5,<4.0.0)",
+    "gspread (>=6.2.1,<7.0.0)",
 ]
 
 

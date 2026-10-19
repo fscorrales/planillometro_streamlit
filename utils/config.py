@@ -1,6 +1,8 @@
 """Módulo de configuración general de la aplicación."""
 
 import os
+from typing import Optional
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -11,6 +13,7 @@ API_BASE_URL: str = os.getenv(
 DEFAULT_TIMEOUT: float = float(os.getenv("DEFAULT_TIMEOUT", "60.0"))
 ADMIN_USERNAME: str = os.getenv("ADMIN_USERNAME", "")
 ADMIN_PASSWORD: str = os.getenv("ADMIN_PASSWORD", "")
+GOOGLE_CREDENTIALS: Optional[str] = os.getenv("GOOGLE_CREDENTIALS")
 
 
 class Settings:
@@ -20,6 +23,7 @@ class Settings:
     DEFAULT_TIMEOUT: float = DEFAULT_TIMEOUT
     ADMIN_USERNAME: str = ADMIN_USERNAME
     ADMIN_PASSWORD: str = ADMIN_PASSWORD
+    GOOGLE_CREDENTIALS: Optional[str] = GOOGLE_CREDENTIALS
 
 
 settings = Settings()

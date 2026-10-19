@@ -7,7 +7,7 @@
     // para que pylance reconozca la ubicación del código fuente.
     // puede contener más de una ubicación (lista)
     "python.analysis.extraPaths": [
-        "${workspaceFolder}/src"
+        "${workspaceFolder}"
     ],
     "python.envFile": "${workspaceFolder}/.env",
     "python.terminal.activateEnvironment": true,
