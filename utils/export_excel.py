@@ -40,7 +40,7 @@ _BORDER_CELDA = Border(
 
 
 # --------------------------------------------------
-def _texto(valor: object) -> str:
+def _texto(valor: Any) -> str:
     """Convierte un valor escalar a ``str`` vacío si es ``None``/``NaN``."""
     if valor is None or pd.isna(valor):
         return ""
@@ -48,7 +48,7 @@ def _texto(valor: object) -> str:
 
 
 # --------------------------------------------------
-def _moneda(valor: object) -> str:
+def _moneda(valor: Any) -> str:
     """Formatea un importe con el formato monetario AR de la vista."""
     if valor is None or pd.isna(valor):
         return formato_moneda_ar(0)

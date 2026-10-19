@@ -6,12 +6,13 @@ __all__ = [
 ]
 
 import re
+from typing import Any
 
 import pandas as pd
 
 
 # --------------------------------------------------
-def normalize_name_for_match(name: object) -> str:
+def normalize_name_for_match(name: Any) -> str:
     """
     Normaliza un nombre para hacer matching robusto entre fuentes
     heterogéneas (con/sin coma, con prefijos como ``(JUBILADO)`` o
@@ -76,7 +77,7 @@ def formato_moneda_ar(valor: object) -> str:
 
 
 # --------------------------------------------------
-def parse_moneda_ar(valor: object) -> float:
+def parse_moneda_ar(valor: Any) -> float:
     """
     Convierte un importe con formato argentino a ``float``.
 

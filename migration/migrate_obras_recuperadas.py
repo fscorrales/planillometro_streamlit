@@ -203,7 +203,7 @@ def map_columns(df: pd.DataFrame) -> dict[str, str]:
 
 
 # --------------------------------------------------
-def clean_text(value: object) -> str:
+def clean_text(value: Any) -> str:
     """Convierte un valor de celda a ``str`` sin ``NaN``/``None``.
 
     Args:

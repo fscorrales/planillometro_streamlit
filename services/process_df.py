@@ -10,6 +10,7 @@ __all__ = [
     "apply_text_filters",
 ]
 
+from typing import Any
 
 import pandas as pd
 
@@ -52,7 +53,7 @@ def apply_text_filters(
     return df_filtrado
 
 # --------------------------------------------------
-def _parse_moneda(valor: object) -> float:
+def _parse_moneda(valor: Any) -> float:
     """
     Convierte un monto con formato argentino a ``float``.
 
@@ -82,7 +83,7 @@ def _parse_moneda(valor: object) -> float:
 
 
 # --------------------------------------------------
-def _texto_limpio(valor: object) -> str:
+def _texto_limpio(valor: Any) -> str:
     """
     Convierte un escalar de pandas/numpy a ``str`` saneado.
 
