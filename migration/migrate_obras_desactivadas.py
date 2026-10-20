@@ -20,7 +20,6 @@ Uso:
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import sys
 import unicodedata
@@ -243,23 +242,6 @@ def parse_ejercicio(value: object) -> int:
 
 
 # --------------------------------------------------
-def deterministic_id(record: dict[str, Any]) -> str:
-    """Genera un ``id`` de 24 hex (formato ObjectId) determinístico.
-
-    El schema de la API marca ``id`` como requerido; derivarlo del
-    contenido hace la migración repetible (misma fila -> mismo id).
-
-    Args:
-        record: Documento ya validado (sin ``id``).
-
-    Returns:
-        String hexadecimal de 24 caracteres.
-    """
-    canonical: str = "|".join(f"{key}={record[key]}" for key in sorted(record))
-    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:24]
-
-
-# --------------------------------------------------
 def build_documents(
     df: pd.DataFrame, column_map: dict[str, str]
 ) -> list[dict[str, Any]]:
@@ -316,11 +298,8 @@ def build_documents(
             continue
 
         document: dict[str, Any] = report.model_dump()
-        # El id se deriva solo de los campos de negocio (sin updated_at)
-        # para que la misma fila genere siempre el mismo id.
-        document["id"] = deterministic_id(
-            {field: document[field] for field in REQUIRED_FIELDS}
-        )
+        # El endpoint add_many no requiere id: MongoDB lo genera al
+        # insertar el documento en la colección.
         documents.append(document)
 
     if skipped_empty:

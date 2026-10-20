@@ -20,7 +20,6 @@ Uso:
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import sys
 import unicodedata
@@ -224,6 +223,37 @@ def clean_text(value: Any) -> str:
 
 
 # --------------------------------------------------
+def format_cod_barrio(value: Any) -> str:
+    """Normaliza el código de barrio a ``str`` de 4 dígitos con ``zeros``.
+
+    Google Sheets/pandas suele traer códigos numéricos como ``884.0`` o
+    ``"884.0"``; se convierten a entero y se rellenan con ceros a la
+    izquierda hasta 4 dígitos (``"884"`` -> ``"0884"``).
+
+    Args:
+        value: Valor crudo de la celda.
+
+    Returns:
+        Cadena de exactamente 4 dígitos con leading zeros; cadena vacía
+        para valores nulos. Los valores no numéricos se devuelven tal
+        cual (recortados) y los mayores a 4 dígitos no se truncan.
+    """
+    text: str = clean_text(value)
+    if not text:
+        return ""
+    # pandas convierte columnas numéricas a float: "884.0" -> "884".
+    try:
+        number: float = float(text.replace(",", "."))
+    except ValueError:
+        # Valor no numérico: se respeta tal cual (la validación del
+        # modelo/UI se encarga de rechazarlo si aplica).
+        return text
+    if not number.is_integer() or number < 0:
+        return text
+    return str(int(number)).zfill(4)
+
+
+# --------------------------------------------------
 def parse_ejercicio(value: object) -> int:
     """Convierte la celda de ejercicio a ``int``.
 
@@ -241,23 +271,6 @@ def parse_ejercicio(value: object) -> int:
         return int(float(text.replace(",", ".")))
     except ValueError as exc:
         raise ValidationError(f"Ejercicio inválido: {value!r}") from exc
-
-
-# --------------------------------------------------
-def deterministic_id(record: dict[str, Any]) -> str:
-    """Genera un ``id`` de 24 hex (formato ObjectId) determinístico.
-
-    El schema de la API marca ``id`` como requerido; derivarlo del
-    contenido hace la migración repetible (misma fila -> mismo id).
-
-    Args:
-        record: Documento ya validado (sin ``id``).
-
-    Returns:
-        String hexadecimal de 24 caracteres.
-    """
-    canonical: str = "|".join(f"{key}={record[key]}" for key in sorted(record))
-    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:24]
 
 
 # --------------------------------------------------
@@ -301,7 +314,7 @@ def build_documents(
         try:
             report = ObrasRecuperadasReport(
                 ejercicio=parse_ejercicio(raw_values["ejercicio"]),
-                cod_barrio=clean_text(raw_values["cod_barrio"]),
+                cod_barrio=format_cod_barrio(raw_values["cod_barrio"]),
                 estructura=clean_text(raw_values["estructura"]),
                 importe=parse_moneda_ar(raw_values["importe"]),
                 notas=clean_text(raw_values["notas"]),
@@ -317,11 +330,8 @@ def build_documents(
             continue
 
         document: dict[str, Any] = report.model_dump()
-        # El id se deriva solo de los campos de negocio (sin updated_at)
-        # para que la misma fila genere siempre el mismo id.
-        document["id"] = deterministic_id(
-            {field: document[field] for field in REQUIRED_FIELDS}
-        )
+        # El endpoint add_many no requiere id: MongoDB lo genera al
+        # insertar el documento en la colección.
         documents.append(document)
 
     if skipped_empty:
