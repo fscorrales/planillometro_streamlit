@@ -337,7 +337,7 @@ def get_obras_recuperadas(
     )
     if not df.empty:
         df = df.sort_values(
-            ["ejercicio", "estructura", "cod_barrio"], ascending=[False, True, True]
+            ["ejercicio", "cod_barrio", "estructura"], ascending=[False, True, True]
         )
 
     return df

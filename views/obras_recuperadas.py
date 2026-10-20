@@ -14,6 +14,7 @@ from components import text_filters_bar
 from services.data_fetcher import get_ejercicios_list, get_obras_recuperadas
 from services.process_df import apply_text_filters
 from utils.endpoints import Endpoints
+from utils.transform_data import formato_moneda_ar
 from views import (
     ReportState,
     dataframe_with_buttons,
@@ -105,6 +106,9 @@ def render() -> None:
 
     # Mostrar resultados (usando session_state para que no desaparezcan)
     if not df_obras_recuperadas.empty:
+        df_obras_recuperadas["importe"] = df_obras_recuperadas["importe"].apply(
+            formato_moneda_ar
+        )
         # Filtros particulares de la grilla (frontend puro, sin llamadas
         # a la API): declarativos en FILTROS_TABLA y aplicados en cascada.
         with st.container(horizontal=False, border=True, width="stretch"):
@@ -117,8 +121,8 @@ def render() -> None:
                 height=300,
                 column_order=[
                     "ejercicio",
-                    "estructura",
                     "cod_barrio",
+                    "estructura",
                     "importe",
                     "notas",
                 ],
