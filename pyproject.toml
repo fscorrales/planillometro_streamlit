@@ -1,6 +1,6 @@
 [project]
 name = "planillometro-streamlit"
-version = "0.4.2"
+version = "0.4.3"
 description = ""
 authors = [{ name = "Fernando Corrales", email = "fscpython@gmail.com" }]
 readme = "README.md"

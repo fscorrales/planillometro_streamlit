@@ -96,6 +96,7 @@ def render() -> None:
         df_obras_recuperadas = get_obras_recuperadas(
             filtro_avanzado=state.filtro_avanzado,
             update_trigger=state.data_version,
+            selections=state.selections,
         )
         if df_obras_recuperadas.empty:
             st.info("No se encontraron resultados.")

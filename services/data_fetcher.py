@@ -307,6 +307,7 @@ def get_referencias_honorarios(update_trigger: int = 0) -> tuple[list[str], list
 def get_obras_recuperadas(
     filtro_avanzado: str = "",
     update_trigger: int = 0,
+    selections: list[tuple[str, list[Any]]] | None = None,
 ) -> pd.DataFrame:
     """
     Obtiene el padrón de obras recuperadas desde la API.
@@ -320,6 +321,11 @@ def get_obras_recuperadas(
     Args:
         filtro_avanzado: Filtro dinámico (e.g. ``ejercicio=2024``).
         update_trigger: Incrementar para forzar la actualización de caché.
+        selections: Tuplas ``(query_param, valores)`` de los multiselects
+            server-side (``filters_config`` de ``report_header``). Cada
+            valor se serializa como string separado por comas
+            (e.g. ``ejercicio=2026,2025``). Lista vacía o ``None`` no
+            agrega parámetros (sin filtro).
 
     Returns:
         DataFrame con las obras recuperadas.
@@ -332,6 +338,10 @@ def get_obras_recuperadas(
         "limit": 0,
         "queryFilter": filtro_avanzado,
     }
+    if selections:
+        for nombre_param, valores in selections:
+            if valores:
+                params_peticion[nombre_param] = ",".join(map(str, valores))
     df: pd.DataFrame = fetch_dataframe(
         Endpoints.OBRAS_RECUPERADAS.value, params=params_peticion
     )
